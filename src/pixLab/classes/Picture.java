@@ -174,6 +174,35 @@ public class Picture extends SimplePicture
     }   
   }
 
+  public void johnnyFilter(int startRow, int startCol)
+  {
+	  Pixel fromPixel = null;
+	  Pixel toPixel = null;
+	  Picture johnny = new Picture("Here'sJohnny.png");
+	  Picture smallJohnny = johnny.scale(0.25,0.25);
+	  Pixel[][] toPixels = this.getPixels2D();
+	  Pixel[][] fromPixels = smallJohnny.getPixels2D();
+	  
+	  int fromRow = 0;
+	  for (int toRow = startRow; toRow < toPixels.length && fromRow < fromPixels.length; toRow++)
+	  {
+		  int fromCol = 0;
+		  for (int toCol = 0; toCol < toPixels[0].length && fromCol < fromPixels[0].length; toCol++)
+		  {
+			  fromPixel = fromPixels[fromRow][fromCol];
+			  toPixel = toPixels[toRow][toCol];
+			  if (!fromPixel.isTransparent())
+			  {
+				  toPixel.setRed(fromPixel.getRed());
+				  toPixel.setBlue(fromPixel.getBlue());
+				  toPixel.setGreen(fromPixel.getGreen());
+			  }
+			  fromCol++;
+		  }
+		  fromRow++;
+	  }
+  }
+  
   /** Method to create a collage of several pictures */
   public void createCollage()
   {
@@ -203,19 +232,75 @@ public class Picture extends SimplePicture
     Color rightColor = null;
     for (int row = 0; row < pixels.length; row++)
     {
-      for (int col = 0; 
-           col < pixels[0].length-1; col++)
+      for (int col = 0; col < pixels[0].length-1; col++)
       {
         leftPixel = pixels[row][col];
         rightPixel = pixels[row][col+1];
         rightColor = rightPixel.getColor();
-        if (leftPixel.colorDistance(rightColor) > 
-            edgeDist)
-          leftPixel.setColor(Color.BLACK);
+        if (leftPixel.colorDistance(rightColor) > edgeDist)
+          leftPixel.setColor(Color.ORANGE);
         else
-          leftPixel.setColor(Color.WHITE);
+          leftPixel.setColor(Color.BLUE);
       }
     }
+  }
+  
+  public void mirrorHorizontalBottomTop()
+  {
+	  Pixel[][] pixels = this.getPixels2D();
+	  Pixel bottomPixel = null;
+	  Pixel topPixel = null;
+	  int height = pixels.length;
+	  for (int col = 0; col < pixels.length; col++)
+	  {
+		  for (int row = 0; row < height/2; row++)
+		  {
+			  bottomPixel = pixels[row][col];
+			  topPixel = pixels[height-1-row][col];
+			  bottomPixel.setColor(topPixel.getColor());
+		  }
+	  }
+  }
+  
+  public void glitchFilter()
+  {
+	  Pixel[][] pixels = this.getPixels2D();
+	  Pixel purpleColoredPixels = null;
+	  Pixel yellowColoredPixels = null;
+	  Pixel rightPixel = null;
+	  Pixel leftPixel = null;
+	  int width = pixels[0].length;
+	  int shiftAmount = (int) (0.33 * pixels[0].length);
+	  
+	  for (int row = 0; row < pixels.length; row++)
+	  {
+		  for (int col = 0; col < pixels[0].length; col++)
+		  {
+			  leftPixel = pixels[row][col];
+			  rightPixel = pixels[row][(width - shiftAmount + col) % width];
+			  Color tempColor = leftPixel.getColor();
+			  leftPixel.setColor(rightPixel.getColor());
+			  rightPixel.setColor(tempColor);
+			  
+		  }
+	  }
+	  
+	  for (int row = 250; row < pixels.length-30; row ++)
+	  {
+		  for (int col = 100; col < pixels[0].length; col++)
+		  {
+			  purpleColoredPixels = pixels[row][col];
+			  purpleColoredPixels.setGreen(0);
+		  }
+	  }
+	  for (int row = 125; row < 275; row ++)
+	  {
+		  for (int col = 225; col < pixels[0].length; col++)
+		  {
+			  yellowColoredPixels = pixels[row][col];
+			  yellowColoredPixels.setRed(0);
+		  }
+	  }
   }
   
   

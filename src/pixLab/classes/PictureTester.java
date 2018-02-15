@@ -69,9 +69,9 @@ public class PictureTester
   
   public static void testGlitchFilter()
   {
-	  Picture barbara = new Picture("barbaraS.jpg");
-	  barbara.glitchFilter();
-	  barbara.explore();
+	  Picture koala = new Picture("koala.jpg");
+	  koala.glitchFilter();
+	  koala.explore();
   }
   
   /** Main method for testing.  Every class can have a main

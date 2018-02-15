@@ -255,8 +255,8 @@ public class Picture extends SimplePicture
 	  {
 		  for (int row = 0; row < height/2; row++)
 		  {
-			  bottomPixel = pixels[row][col];
-			  topPixel = pixels[height-1-row][col];
+			  bottomPixel = pixels [row][col];
+			  topPixel = pixels [height-1-row][col];
 			  bottomPixel.setColor(topPixel.getColor());
 		  }
 	  }
@@ -267,21 +267,23 @@ public class Picture extends SimplePicture
 	  Pixel[][] pixels = this.getPixels2D();
 	  Pixel purpleColoredPixels = null;
 	  Pixel yellowColoredPixels = null;
-	  Pixel rightPixel = null;
-	  Pixel leftPixel = null;
+	  Pixel redPixels = null;
+	  Pixel shiftedRedPixels = null;
 	  int width = pixels[0].length;
 	  int shiftAmount = (int) (0.33 * pixels[0].length);
 	  
 	  for (int row = 0; row < pixels.length; row++)
 	  {
+		  Color [] currentColors = new Color[pixels[0].length];
+		  
+		  for (int col = 0; col < pixels[row].length; col++)
+		  {
+			  currentColors[col] = pixels[row][col].getColor();
+		  }
+		  
 		  for (int col = 0; col < pixels[0].length; col++)
 		  {
-			  leftPixel = pixels[row][col];
-			  rightPixel = pixels[row][(width - shiftAmount + col) % width];
-			  Color tempColor = leftPixel.getColor();
-			  leftPixel.setColor(rightPixel.getColor());
-			  rightPixel.setColor(tempColor);
-			  
+			  pixels[row][col].setColor(currentColors[(col + shiftAmount) % width]);  
 		  }
 	  }
 	  
@@ -289,7 +291,7 @@ public class Picture extends SimplePicture
 	  {
 		  for (int col = 100; col < pixels[0].length; col++)
 		  {
-			  purpleColoredPixels = pixels[row][col];
+			  purpleColoredPixels = pixels [row][col];
 			  purpleColoredPixels.setGreen(0);
 		  }
 	  }
@@ -297,8 +299,24 @@ public class Picture extends SimplePicture
 	  {
 		  for (int col = 225; col < pixels[0].length; col++)
 		  {
-			  yellowColoredPixels = pixels[row][col];
+			  yellowColoredPixels = pixels [row][col];
 			  yellowColoredPixels.setRed(0);
+		  }
+	  }
+	  
+	  for (int row = 0; row < 100; row++)
+	  {
+		  for (int col = 0; col < 150; col++)
+		  {
+			  redPixels = pixels [row][col];
+		  }
+	  }
+	  for (int row = 50; row < 150; row++)
+	  {
+		  for (int col = 40; col< 190; col++)
+		  {
+			  shiftedRedPixels = pixels [row][col];
+			  shiftedRedPixels.setColor(redPixels.getColor());
 		  }
 	  }
   }
